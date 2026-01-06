@@ -13,7 +13,6 @@ const Gallery: React.FC<GalleryProps> = ({ onCardClick, cardData }) => {
             {cardData.map((card, index) => (
               <Card 
                 key={index}
-                index={index}
                 image={card.image}
                 title={card.title}
                 description={card.description}

@@ -2,14 +2,13 @@ import { useState } from 'react'; // 호버 상태 관리를 위한 useState 추
 import React from 'react'; // 이게 있어야 React.FC를 사용할 수 있습니다
 
 interface CardProps {
-  index: number;
   image: string;
   title: string;
   description: string;
   onClick?: () => void;
 }
 
-const Card: React.FC<CardProps> = ({ index, image, title, description, onClick }) => {
+const Card: React.FC<CardProps> = ({ image, title, description, onClick }) => {
   const [isHovered, setIsHovered] = useState(false); // 호버 상태 관리
 
   return (

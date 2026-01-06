@@ -26,7 +26,11 @@ public class TableHandler implements RequestHandler<APIGatewayProxyRequestEvent,
         if ("OPTIONS".equals(input.getHttpMethod())) {
             return new APIGatewayProxyResponseEvent()
                     .withStatusCode(200)
-                    .withHeaders(Map.of("Access-Control-Allow-Origin", "*"));
+                    .withHeaders(Map.of(
+                            "Access-Control-Allow-Origin", "*",
+                            "Access-Control-Allow-Methods", "GET,POST,OPTIONS",
+                            "Access-Control-Allow-Headers", "Content-Type,Authorization"
+                    ));
         }
 
         try {

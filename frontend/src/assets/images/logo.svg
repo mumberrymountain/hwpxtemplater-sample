@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F472B6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#A855F7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6366F1;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Outer hexagon frame -->
+  <polygon points="100,10 170,50 170,130 100,170 30,130 30,50" 
+           fill="none" 
+           stroke="url(#mainGradient)" 
+           stroke-width="3"
+           opacity="0.6"/>
+  
+  <!-- Inner geometric shape representing document layers -->
+  <g opacity="0.9">
+    <!-- Back layer -->
+    <rect x="60" y="65" width="70" height="85" rx="4" 
+          fill="#A855F7" opacity="0.3"
+          transform="rotate(-5 95 107.5)"/>
+    <!-- Middle layer -->
+    <rect x="62" y="63" width="70" height="85" rx="4" 
+          fill="#A855F7" opacity="0.5"
+          transform="rotate(-2 97 105.5)"/>
+    <!-- Front layer with gradient -->
+    <rect x="65" y="60" width="70" height="85" rx="4" 
+          fill="url(#mainGradient)" 
+          stroke="#F472B6" 
+          stroke-width="1.5"/>
+  </g>
+  
+  <!-- Template brackets - code style -->
+  <g filter="url(#glow)">
+    <text x="50" y="110" 
+          font-family="'Courier New', monospace" 
+          font-size="42" 
+          font-weight="bold"
+          fill="#60A5FA">&#123;</text>
+    <text x="128" y="110" 
+          font-family="'Courier New', monospace" 
+          font-size="42" 
+          font-weight="bold"
+          fill="#60A5FA">&#125;</text>
+  </g>
+  
+  <!-- HWPX text badge at bottom -->
+  <!--
+  <g>
+    <rect x="15" y="153" width="170" height="34" rx="17" 
+          fill="#1F1F1F" 
+          stroke="url(#accentGradient)" 
+          stroke-width="2"/>
+    <text x="100" y="177" 
+          font-family="'Arial', sans-serif" 
+          font-size="15" 
+          font-weight="bold"
+          fill="url(#mainGradient)" 
+          text-anchor="middle"
+          letter-spacing="1.5">HWPX TEMPLATER</text>
+  </g>
+  -->
+  
+  <!-- Decorative dots -->
+  <circle cx="100" cy="30" r="3" fill="#F472B6" opacity="0.8"/>
+  <circle cx="80" cy="135" r="2.5" fill="#60A5FA" opacity="0.6"/>
+  <circle cx="120" cy="135" r="2.5" fill="#60A5FA" opacity="0.6"/>
+</svg>

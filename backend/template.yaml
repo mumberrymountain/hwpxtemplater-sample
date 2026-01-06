@@ -1,0 +1,140 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  backend
+
+  Sample SAM Template for backend
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 20
+    Runtime: java17
+    Architectures:
+      - x86_64
+    MemorySize: 512
+    CodeUri: functions
+
+Conditions:
+  IsProd: !Equals [!Ref Environment, prod]
+
+Resources:
+  BasicApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      BinaryMediaTypes:
+        - application/octet-stream
+        - '*~1*'
+      Auth:
+        ApiKeyRequired: false
+      Cors:
+        AllowOrigin: !If
+          - IsProd
+          - "'https://yourdomain.com'"
+          - "'http://localhost:5173'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowMethods: "'GET,POST'"
+        AllowCredentials: false
+  # API 1: Basic
+  BasicFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.mumberrymountain.BasicHandler::handleRequest
+      Events:
+        BasicApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref BasicApi
+            Path: /basic
+            Method: post
+
+  # API 2: Condition
+  ConditionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.mumberrymountain.ConditionHandler::handleRequest
+      Events:
+        ConditionApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref BasicApi
+            Path: /condition
+            Method: post
+
+  # API 3: Loop
+  LoopFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.mumberrymountain.LoopHandler::handleRequest
+      Events:
+        LoopApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref BasicApi
+            Path: /loop
+            Method: post
+
+  # API 4: Image
+  ImageFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.mumberrymountain.ImageHandler::handleRequest
+      Events:
+        ImageApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref BasicApi
+            Path: /image
+            Method: post
+
+  # API 5: Table
+  TableFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.mumberrymountain.TableHandler::handleRequest
+      Events:
+        TableApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref BasicApi
+            Path: /table
+            Method: post
+
+  # API 1: Basic
+  TemplateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.mumberrymountain.TemplateHandler::handleRequest
+      Events:
+        BasicApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref BasicApi
+            Path: /template
+            Method: post
+
+Outputs:
+  BasicUrl:
+    Description: "Basic Function URL"
+    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/basic"
+
+  ConditionUrl:
+    Description: "Condition Function URL"
+    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/condition"
+
+  LoopUrl:
+    Description: "Loop Function URL"
+    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/loop"
+
+  ImageUrl:
+    Description: "Image Function URL"
+    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/image"
+
+  TableUrl:
+    Description: "Table Function URL"
+    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/table"
+
+  TemplateUrl:
+    Description: "Table Function URL"
+    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/template"

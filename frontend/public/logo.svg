@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F472B6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#A855F7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6366F1;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Outer hexagon frame - 최대한 크게, 여백 최소화 -->
+  <polygon points="100,2 192,52 192,148 100,198 8,148 8,52" 
+           fill="none" 
+           stroke="url(#mainGradient)" 
+           stroke-width="10"
+           opacity="1"/>
+  
+  <!-- Inner geometric shape - 화면을 거의 가득 채우도록 -->
+  <g opacity="1">
+    <!-- Back layer -->
+    <rect x="20" y="25" width="160" height="150" rx="8" 
+          fill="#A855F7" opacity="0.6"
+          transform="rotate(-4 100 100)"/>
+    <!-- Middle layer -->
+    <rect x="22" y="23" width="160" height="150" rx="8" 
+          fill="#A855F7" opacity="0.8"
+          transform="rotate(-2 102 98)"/>
+    <!-- Front layer with gradient - 최대한 크게 -->
+    <rect x="25" y="20" width="150" height="160" rx="8" 
+          fill="url(#mainGradient)" 
+          stroke="#F472B6" 
+          stroke-width="5"/>
+  </g>
+  
+  <!-- Template brackets - 최대한 크게, 중앙에 배치 -->
+  <text x="10" y="125" 
+        font-family="'Courier New', monospace" 
+        font-size="85" 
+        font-weight="bold"
+        fill="#60A5FA">{</text>
+  <text x="170" y="125" 
+        font-family="'Courier New', monospace" 
+        font-size="85" 
+        font-weight="bold"
+        fill="#60A5FA">}</text>
+  
+  <!-- Decorative dots - 최대한 크게 -->
+  <circle cx="100" cy="8" r="6" fill="#F472B6" opacity="1"/>
+  <circle cx="40" cy="175" r="5.5" fill="#60A5FA" opacity="1"/>
+  <circle cx="160" cy="175" r="5.5" fill="#60A5FA" opacity="1"/>
+</svg>

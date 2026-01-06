@@ -1,0 +1,40 @@
+# SAM & CloudFormation
+.aws-sam/
+samconfig.toml
+packaged.yaml
+packaged.yml
+
+# Gradle
+.gradle/
+build/
+.gradletasknamecache
+bin/
+out/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+.mtj.tmp/
+hs_err_pid*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+
+# Environment variables
+.env
+.env.local
+*.env
+
+# AWS credentials
+.aws/
+
+# Logs
+*.log

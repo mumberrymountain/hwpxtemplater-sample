@@ -42,6 +42,12 @@ Resources:
             RestApiId: !Ref BasicApi
             Path: /basic
             Method: post
+        BasicApiOptionsEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref BasicApi
+            Path: /basic
+            Method: options
 
   # API 2: Condition
   ConditionFunction:
@@ -55,6 +61,12 @@ Resources:
             RestApiId: !Ref BasicApi
             Path: /condition
             Method: post
+        ConditionApiOptionsEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref BasicApi
+            Path: /condition
+            Method: options
 
   # API 3: Loop
   LoopFunction:
@@ -68,6 +80,12 @@ Resources:
             RestApiId: !Ref BasicApi
             Path: /loop
             Method: post
+        LoopApiOptionsEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref BasicApi
+            Path: /loop
+            Method: options
 
   # API 4: Image
   ImageFunction:
@@ -81,6 +99,12 @@ Resources:
             RestApiId: !Ref BasicApi
             Path: /image
             Method: post
+        ImageApiOptionsEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref BasicApi
+            Path: /image
+            Method: options
 
   # API 5: Table
   TableFunction:
@@ -94,6 +118,12 @@ Resources:
             RestApiId: !Ref BasicApi
             Path: /table
             Method: post
+        TableApiOptionsEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref BasicApi
+            Path: /table
+            Method: options
 
   # API 1: Basic
   TemplateFunction:
@@ -107,6 +137,12 @@ Resources:
             RestApiId: !Ref BasicApi
             Path: /template
             Method: post
+        TemplateApiOptionsEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref BasicApi
+            Path: /template
+            Method: options
 
 Outputs:
   ApiGatewayUrl:

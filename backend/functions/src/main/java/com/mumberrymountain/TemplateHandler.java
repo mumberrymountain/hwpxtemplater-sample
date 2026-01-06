@@ -24,6 +24,7 @@ public class TemplateHandler implements RequestHandler<APIGatewayProxyRequestEve
             if (inputStream == null) {
                 return new APIGatewayProxyResponseEvent()
                         .withStatusCode(404)
+                        .withHeaders(Map.of("Access-Control-Allow-Origin", "*"))
                         .withBody("{\"error\": \"File not found\"}");
             }
 
@@ -33,6 +34,7 @@ public class TemplateHandler implements RequestHandler<APIGatewayProxyRequestEve
             return new APIGatewayProxyResponseEvent()
                     .withStatusCode(200)
                     .withHeaders(Map.of(
+                            "Access-Control-Allow-Origin", "*",
                             "Content-Type", "application/octet-stream",
                             "Content-Disposition", "attachment; filename=output.hwpx",
                             "Accept", "*/*"
@@ -45,6 +47,7 @@ public class TemplateHandler implements RequestHandler<APIGatewayProxyRequestEve
 
             return new APIGatewayProxyResponseEvent()
                     .withStatusCode(500)
+                    .withHeaders(Map.of("Access-Control-Allow-Origin", "*"))
                     .withBody("{\"message\":\"HWPX generation failed\"}");
         }
     }

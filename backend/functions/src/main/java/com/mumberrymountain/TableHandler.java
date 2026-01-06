@@ -52,6 +52,7 @@ public class TableHandler implements RequestHandler<APIGatewayProxyRequestEvent,
             return new APIGatewayProxyResponseEvent()
                     .withStatusCode(200)
                     .withHeaders(Map.of(
+                            "Access-Control-Allow-Origin", "*",
                             "Content-Type", "application/octet-stream",
                             "Content-Disposition", "attachment; filename*=UTF-8''" + CommonUtils.encodeFileName(fileName),
                             "Accept", "*/*"  // 추가
@@ -64,6 +65,7 @@ public class TableHandler implements RequestHandler<APIGatewayProxyRequestEvent,
 
             return new APIGatewayProxyResponseEvent()
                     .withStatusCode(500)
+                    .withHeaders(Map.of("Access-Control-Allow-Origin", "*"))
                     .withBody("{\"message\":\"HWPX generation failed\"}");
         }
     }

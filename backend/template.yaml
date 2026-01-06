@@ -15,9 +15,6 @@ Globals:
     MemorySize: 512
     CodeUri: functions
 
-Conditions:
-  IsProd: !Equals [!Ref Environment, prod]
-
 Resources:
   BasicApi:
     Type: AWS::Serverless::Api

@@ -29,10 +29,7 @@ Resources:
       Auth:
         ApiKeyRequired: false
       Cors:
-        AllowOrigin: !If
-          - IsProd
-          - "'https://yourdomain.com'"
-          - "'http://localhost:5173'"
+        AllowOrigin: "'*'"
         AllowHeaders: "'Content-Type,Authorization'"
         AllowMethods: "'GET,POST'"
         AllowCredentials: false
@@ -115,26 +112,30 @@ Resources:
             Method: post
 
 Outputs:
+  ApiGatewayUrl:
+    Description: "API Gateway Base URL"
+    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+  
   BasicUrl:
     Description: "Basic Function URL"
-    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/basic"
+    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/basic"
 
   ConditionUrl:
     Description: "Condition Function URL"
-    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/condition"
+    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/condition"
 
   LoopUrl:
     Description: "Loop Function URL"
-    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/loop"
+    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/loop"
 
   ImageUrl:
     Description: "Image Function URL"
-    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/image"
+    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/image"
 
   TableUrl:
     Description: "Table Function URL"
-    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/table"
+    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/table"
 
   TemplateUrl:
-    Description: "Table Function URL"
-    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/template"
+    Description: "Template Function URL"
+    Value: !Sub "https://${BasicApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/template"

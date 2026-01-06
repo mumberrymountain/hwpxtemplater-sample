@@ -16,6 +16,13 @@ public class ConditionHandler implements RequestHandler<APIGatewayProxyRequestEv
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent input, Context context) {
+        // OPTIONS 요청 처리 (CORS Preflight)
+        if ("OPTIONS".equals(input.getHttpMethod())) {
+            return new APIGatewayProxyResponseEvent()
+                    .withStatusCode(200)
+                    .withHeaders(Map.of("Access-Control-Allow-Origin", "*"));
+        }
+
         try {
             String fileName = RequestUtils.getParameter(input, "fileName");
             Map<String, Object> templateParam = RequestUtils.getParameter(input, "templateParam");

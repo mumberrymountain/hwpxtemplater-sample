@@ -28,7 +28,7 @@ Resources:
       Cors:
         AllowOrigin: "'*'"
         AllowHeaders: "'Content-Type,Authorization'"
-        AllowMethods: "'GET,POST'"
+        AllowMethods: "'GET,POST,OPTIONS'"
         AllowCredentials: false
   # API 1: Basic
   BasicFunction:

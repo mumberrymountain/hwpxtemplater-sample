@@ -15,6 +15,12 @@ public class TemplateHandler implements RequestHandler<APIGatewayProxyRequestEve
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent input, Context context) {
+        // OPTIONS 요청 처리 (CORS Preflight)
+        if ("OPTIONS".equals(input.getHttpMethod())) {
+            return new APIGatewayProxyResponseEvent()
+                    .withStatusCode(200)
+                    .withHeaders(Map.of("Access-Control-Allow-Origin", "*"));
+        }
 
         try {
             Map<String, String> requestData = JacksonUtils.toObject(Base64Utils.decodeBase64ToJson(input.getBody()), Map.class);

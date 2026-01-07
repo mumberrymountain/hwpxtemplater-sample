@@ -91,6 +91,17 @@ jobs:
           echo "api_url=$API_URL" >> $GITHUB_OUTPUT
           echo "API Gateway URL: $API_URL"
 
+      - name: Get S3 bucket from CloudFront Distribution
+        id: get-s3-bucket
+        run: |
+          ORIGIN_DOMAIN=$(aws cloudfront get-distribution \
+            --id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --query 'Distribution.DistributionConfig.Origins.Items[0].DomainName' \
+            --output text)
+          S3_BUCKET=$(echo $ORIGIN_DOMAIN | sed 's/\.s3\..*//')
+          echo "s3_bucket=$S3_BUCKET" >> $GITHUB_OUTPUT
+          echo "S3 Bucket from CloudFront: $S3_BUCKET"
+
       - name: Build React app with API URL
         run: yarn build
         env:
@@ -98,10 +109,15 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync dist/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
-          aws s3 cp dist/index.html s3://${{ secrets.S3_BUCKET_NAME }}/index.html --cache-control "no-cache"
+          if [ -n "${{ steps.get-s3-bucket.outputs.s3_bucket }}" ]; then
+            S3_BUCKET="${{ steps.get-s3-bucket.outputs.s3_bucket }}"
+          else
+            S3_BUCKET="${{ secrets.S3_BUCKET_NAME }}"
+          fi
+          aws s3 sync dist/ s3://$S3_BUCKET --delete
+          aws s3 cp dist/index.html s3://$S3_BUCKET/index.html --cache-control "no-cache"
 
-      - name: Invalidate CloudFront cache (optional)
+      - name: Invalidate CloudFront cache
         run: |
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \

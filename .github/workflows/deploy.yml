@@ -98,9 +98,10 @@ jobs:
             --id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
             --query 'Distribution.DistributionConfig.Origins.Items[0].DomainName' \
             --output text)
-          S3_BUCKET=$(echo $ORIGIN_DOMAIN | sed 's/\.s3\..*//')
+          echo "Origin Domain: $ORIGIN_DOMAIN"
+          S3_BUCKET=$(echo "$ORIGIN_DOMAIN" | awk -F'.' '{print $1}')
+          echo "Extracted S3 Bucket: $S3_BUCKET"
           echo "s3_bucket=$S3_BUCKET" >> $GITHUB_OUTPUT
-          echo "S3 Bucket from CloudFront: $S3_BUCKET"
 
       - name: Build React app with API URL
         run: yarn build

@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import MonacoEditor from "@monaco-editor/react";
 import type { Dispatch, SetStateAction } from "react";
 import type { OnMount } from "@monaco-editor/react";
@@ -25,9 +25,19 @@ const Editor: React.FC<EditorProps> = ({cardData, setCardData, selectedCardIndex
   const numberInputRef = useRef<HTMLInputElement>(null);
   const booleanInputRef = useRef<HTMLSelectElement>(null);
   const editorRef = useRef<Parameters<OnMount>[0] | null>(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+
   useEffect(() => {
     templateParamRef.current = cardData[selectedCardIndex]?.templateParam;
   }, [cardData, selectedCardIndex]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   const getAllPrimitiveValues = (obj: TemplateParam | TemplateParamValue): (string | boolean | number)[] => {
     const values: (string | boolean | number)[] = [];
@@ -278,10 +288,10 @@ const Editor: React.FC<EditorProps> = ({cardData, setCardData, selectedCardIndex
   return (
     <div
       ref={containerRef}
-      className="h-full relative min-h-0"
+      className="h-full relative min-h-[400px] sm:min-h-[500px] lg:min-h-0"
     >
       <MonacoEditor
-        height="100%"
+        height={isMobile ? "400px" : "100%"}
         language="java"
         theme="vs-dark"
         value={code}

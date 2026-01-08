@@ -9,7 +9,7 @@ const Gallery: React.FC<GalleryProps> = ({ onCardClick, cardData }) => {
 
   return (
     <>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(max(300px,24%),1fr))] gap-4 w-[95%] h-[800px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[repeat(auto-fit,minmax(max(300px,24%),1fr))] gap-4 w-[95%] pb-5 overflow-auto">
             {cardData.map((card, index) => (
               <Card 
                 key={index}

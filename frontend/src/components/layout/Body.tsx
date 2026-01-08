@@ -21,7 +21,7 @@ const Body: React.FC<BodyProps> = ({cardData, setCardData, selectedCardIndex, se
 
   return (
     <>
-        <div className="flex flex-col h-[calc(100vh-110px)] items-center">
+        <div className="flex flex-col min-h-[calc(100vh-80px)] md:min-h-[calc(100vh-110px)] items-center overflow-auto">
             <Explanation selectedCard={selectedCard} selectedCardIndex={selectedCardIndex} setSelectedCardIndex={setSelectedCardIndex}/>
         {selectedCardIndex === null ? (
             <Gallery onCardClick={handleCardClick} cardData={cardData} />

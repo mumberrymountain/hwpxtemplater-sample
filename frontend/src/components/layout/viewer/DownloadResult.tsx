@@ -43,19 +43,19 @@ const DownloadResult : React.FC<DownloadResultProps> = ({selectedCardIndex, card
     }
     return (
       <>
-        <div className="bg-[#1a1a1a] text-[#a0a0a0] rounded-xl h-[50px] p-[30px]">
-           <div className="flex items-center gap-4 h-full">
+        <div className="bg-[#1a1a1a] text-[#a0a0a0] rounded-xl min-h-[50px] p-4 lg:p-[30px]">
+           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 lg:gap-4 h-full">
               <input
                 id="resultFileName"
                 type="text"
                 placeholder="파일 이름을 입력하세요"
-                className="flex-1 bg-[#2d2d2d] text-[#e0e0e0] border border-[#3d3d3d] rounded-lg px-3 py-2 text-sm outline-none focus:border-[#4d4d4d]"
+                className="flex-1 bg-[#2d2d2d] text-[#e0e0e0] border border-[#3d3d3d] rounded-lg px-3 py-2 text-xs lg:text-sm outline-none focus:border-[#4d4d4d] min-w-0"
                 value={resultFileName}
                 onChange={(e) => setResultFileName(e.target.value)}
               />
               
               <button
-                className="bg-[#365880] hover:bg-[#0052a3] text-white border-none rounded-lg px-5 py-[10px] text-sm font-semibold cursor-pointer whitespace-nowrap transition-colors duration-200"
+                className="bg-[#365880] hover:bg-[#0052a3] text-white border-none rounded-lg px-4 lg:px-5 py-2 lg:py-[10px] text-xs lg:text-sm font-semibold cursor-pointer whitespace-nowrap transition-colors duration-200 shrink-0"
                 onClick={onClickDownloadResultFile}
               >
                 다운로드

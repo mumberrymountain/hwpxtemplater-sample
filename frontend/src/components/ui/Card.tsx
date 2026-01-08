@@ -12,7 +12,7 @@ const Card: React.FC<CardProps> = ({ image, title, description, onClick }) => {
   const [isHovered, setIsHovered] = useState(false); // 호버 상태 관리
 
   return (
-    <div className="p-5 flex justify-center items-center h-[300px]">
+    <div className="p-3 md:p-5 flex justify-center items-center h-[fit-content]">
       <div 
         className={`w-full h-full rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] overflow-hidden cursor-pointer transition-all duration-300 ease-in-out ${
           isHovered 
@@ -24,19 +24,19 @@ const Card: React.FC<CardProps> = ({ image, title, description, onClick }) => {
        onClick={onClick}
       >
         <div 
-          className={`h-[80%] bg-cover bg-center bg-no-repeat transition-transform duration-300 ease-in-out ${
+          className={`h-[210px] bg-cover bg-center bg-no-repeat transition-transform duration-300 ease-in-out ${
             isHovered ? 'scale-105' : 'scale-100'
           }`}
           style={{backgroundImage: `url(${image})`}}
         ></div>
-        <div className="flex justify-between h-[20%]">
-            <div className="flex justify-center flex-col p-[10px]">
-              <h4>{title}</h4>
-              <p className="text-[13px] mt-[3px]">{description}</p>
+        <div className="flex justify-between h-[fit-content]">
+            <div className="flex justify-space-between flex-col p-2 md:p-[10px] min-w-0 flex-1">
+              <h4 className="text-sm md:text-base">{title}</h4>
+              <p className="text-[11px] md:text-[13px] mt-[3px]">{description}</p>
             </div>
-            <div className="flex items-center pr-[10px]">
+            <div className="flex items-center pr-2 md:pr-[10px] shrink-0">
               <i 
-                className={`bi bi-chevron-right text-white text-[23px] transition-transform duration-300 ease-in-out ${
+                className={`bi bi-chevron-right text-white text-lg md:text-[23px] transition-transform duration-300 ease-in-out ${
                   isHovered ? 'translate-x-1' : 'translate-x-0'
                 }`}
               ></i>

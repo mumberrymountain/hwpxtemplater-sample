@@ -8,7 +8,7 @@ interface ResultProps {
 
 const Result : React.FC<ResultProps> = ({selectedCardIndex, cardData}) => {
   return (
-    <div className="p-5">
+    <div className="p-3 lg:p-5">
         <DownloadResult selectedCardIndex={selectedCardIndex} cardData={cardData}/>
     </div>
   )

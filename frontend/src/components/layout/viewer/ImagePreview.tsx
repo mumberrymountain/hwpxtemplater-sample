@@ -24,21 +24,32 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({imagePath}) => {
     setIsZoomed(!isZoomed);
   };
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
     if (!isZoomed) return;
     e.preventDefault();
+    const { clientX, clientY } = 'touches' in e 
+      ? e.touches[0] 
+      : { clientX: e.clientX, clientY: e.clientY };
     setIsDragging(true);
     setDragStart({
-      x: e.clientX - position.x,
-      y: e.clientY - position.y
+      x: clientX - position.x,
+      y: clientY - position.y
     });
   };
 
   useEffect(() => {
     if (!isDragging || !isZoomed) return;
 
-    const handleGlobalMouseMove = (e: MouseEvent) => {
+    const handleGlobalMove = (e: MouseEvent | TouchEvent) => {
       if (!containerRef.current || !imageRef.current) return;
+      if (e instanceof TouchEvent) {
+        e.preventDefault();
+        if (e.touches.length === 0) return;
+      }
+      
+      const { clientX, clientY } = e instanceof MouseEvent 
+        ? e 
+        : e.touches[0];
       
       const containerRect = containerRef.current.getBoundingClientRect();
       const containerWidth = containerRect.width;
@@ -56,8 +67,8 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({imagePath}) => {
       const maxX = Math.max(0, (scaledWidth - containerWidth) / 2);
       const maxY = Math.max(0, (scaledHeight - containerHeight) / 2);
       
-      const newPosX = e.clientX - dragStart.x;
-      const newPosY = e.clientY - dragStart.y;
+      const newPosX = clientX - dragStart.x;
+      const newPosY = clientY - dragStart.y;
       
       setPosition({
         x: Math.max(-maxX, Math.min(maxX, newPosX)),
@@ -65,29 +76,33 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({imagePath}) => {
       });
     };
 
-    const handleGlobalMouseUp = () => {
+    const handleGlobalEnd = () => {
       setIsDragging(false);
     };
 
-    window.addEventListener('mousemove', handleGlobalMouseMove);
-    window.addEventListener('mouseup', handleGlobalMouseUp);
+    window.addEventListener('mousemove', handleGlobalMove, { passive: false });
+    window.addEventListener('mouseup', handleGlobalEnd, { passive: false });
+    window.addEventListener('touchmove', handleGlobalMove, { passive: false });
+    window.addEventListener('touchend', handleGlobalEnd, { passive: false });
 
     return () => {
-      window.removeEventListener('mousemove', handleGlobalMouseMove);
-      window.removeEventListener('mouseup', handleGlobalMouseUp);
+      window.removeEventListener('mousemove', handleGlobalMove);
+      window.removeEventListener('mouseup', handleGlobalEnd);
+      window.removeEventListener('touchmove', handleGlobalMove);
+      window.removeEventListener('touchend', handleGlobalEnd);
     };
   }, [isDragging, dragStart, isZoomed, scale]);
 
   return (
     <>
-        <div className="flex-1 mt-5 flex flex-col min-h-0 relative">
+        <div className="flex-1 mt-5 flex flex-col min-h-[200px] lg:min-h-0 relative">
             <div 
               ref={containerRef}
-              className="flex-1 border border-[#2a2a2a] bg-[#0a0a0a] rounded-xl flex items-center justify-center min-h-0 overflow-hidden relative"
+              className="flex-1 border border-[#2a2a2a] bg-[#0a0a0a] rounded-xl flex items-center justify-center min-h-[200px] lg:min-h-0 overflow-hidden relative"
             >
               <div 
                 ref={imageRef}
-                className="rounded-lg bg-contain bg-center bg-no-repeat transition-transform duration-300"
+                className="rounded-lg bg-contain bg-center bg-no-repeat transition-transform duration-300 aspect-[3/4] lg:aspect-auto"
                 style={{
                   backgroundImage: `url(${imagePath})`,
                   transform: `scale(${scale}) translate(${position.x / scale}px, ${position.y / scale}px)`,
@@ -97,7 +112,8 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({imagePath}) => {
                   maxWidth: '90%',
                   maxHeight: '90%'
                 }}
-                onMouseDown={handleMouseDown}
+                onMouseDown={handleStart}
+                onTouchStart={handleStart}
               ></div>
               
               <button

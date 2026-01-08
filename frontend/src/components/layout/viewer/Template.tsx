@@ -31,8 +31,8 @@ const Template: React.FC<TemplateProps> = ({selectedCardIndex, cardData}) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="p-5 h-full flex flex-col min-h-0">
-        <div className="bg-[#1a1a1a] text-[#a0a0a0] rounded-xl p-[30px] shrink-0">
+    <div className="p-3 lg:p-5 h-full flex flex-col min-h-[350px] lg:min-h-0">
+        <div className="bg-[#1a1a1a] text-[#a0a0a0] rounded-xl p-4 lg:p-[30px] shrink-0">
             <p>{`${cardData[selectedCardIndex].api}.hwpx`}</p>
             <p className="text-[#8b5cf6] text-xs mt-[10px]">
                 <i className="bi bi-file-earmark-arrow-down"></i>

@@ -14,6 +14,8 @@ Globals:
       - x86_64
     MemorySize: 512
     CodeUri: functions
+    SnapStart:
+      ApplyOn: PublishedVersions
 
 Resources:
   BasicApi:

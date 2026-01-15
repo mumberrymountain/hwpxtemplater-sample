@@ -6,59 +6,27 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.mumberrymountain.util.Base64Utils;
 import com.mumberrymountain.util.JacksonUtils;
+import com.mumberrymountain.util.ResponseUtils;
 
 import java.io.InputStream;
-import java.util.Base64;
 import java.util.Map;
 
 public class TemplateHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent input, Context context) {
-        // OPTIONS 요청 처리 (CORS Preflight)
-        if ("OPTIONS".equals(input.getHttpMethod())) {
-            return new APIGatewayProxyResponseEvent()
-                    .withStatusCode(200)
-                    .withHeaders(Map.of(
-                            "Access-Control-Allow-Origin", "*",
-                            "Access-Control-Allow-Methods", "GET,POST,OPTIONS",
-                            "Access-Control-Allow-Headers", "Content-Type,Authorization"
-                    ));
-        }
+        if ("OPTIONS".equals(input.getHttpMethod())) return ResponseUtils.preflight();
 
         try {
             Map<String, String> requestData = JacksonUtils.toObject(Base64Utils.decodeBase64ToJson(input.getBody()), Map.class);
-
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("hwpx/" + requestData.get("fileName"));
+            if (inputStream == null) throw  new Exception("File not found");
 
-            if (inputStream == null) {
-                return new APIGatewayProxyResponseEvent()
-                        .withStatusCode(404)
-                        .withHeaders(Map.of("Access-Control-Allow-Origin", "*"))
-                        .withBody("{\"error\": \"File not found\"}");
-            }
-
-            // 파일 내용 읽기
-            byte[] fileContent = inputStream.readAllBytes();
-
-            return new APIGatewayProxyResponseEvent()
-                    .withStatusCode(200)
-                    .withHeaders(Map.of(
-                            "Access-Control-Allow-Origin", "*",
-                            "Content-Type", "application/octet-stream",
-                            "Content-Disposition", "attachment; filename=output.hwpx",
-                            "Accept", "*/*"
-                    ))
-                    .withIsBase64Encoded(true)
-                    .withBody(Base64.getEncoder().encodeToString(fileContent));
+            return ResponseUtils.success("output.hwpx", inputStream.readAllBytes());
 
         } catch (Exception e) {
             e.printStackTrace();
-
-            return new APIGatewayProxyResponseEvent()
-                    .withStatusCode(500)
-                    .withHeaders(Map.of("Access-Control-Allow-Origin", "*"))
-                    .withBody("{\"message\":\"HWPX generation failed\"}");
+            return ResponseUtils.error();
         }
     }
 }

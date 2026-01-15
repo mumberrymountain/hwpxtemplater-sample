@@ -6,12 +6,12 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.mumberrymountain.util.CommonUtils;
 import com.mumberrymountain.util.RequestUtils;
+import com.mumberrymountain.util.ResponseUtils;
 import io.github.mumberrymountain.HWPXTemplater;
 import io.github.mumberrymountain.model.Image;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.file.Path;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,21 +19,12 @@ public class ImageHandler implements RequestHandler<APIGatewayProxyRequestEvent,
 
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent input, Context context) {
-        // OPTIONS 요청 처리 (CORS Preflight)
-        if ("OPTIONS".equals(input.getHttpMethod())) {
-            return new APIGatewayProxyResponseEvent()
-                    .withStatusCode(200)
-                    .withHeaders(Map.of(
-                            "Access-Control-Allow-Origin", "*",
-                            "Access-Control-Allow-Methods", "GET,POST,OPTIONS",
-                            "Access-Control-Allow-Headers", "Content-Type,Authorization"
-                    ));
-        }
+        if ("OPTIONS".equals(input.getHttpMethod())) return ResponseUtils.preflight();
+
 
         try {
             String fileName = RequestUtils.getParameter(input, "fileName");
             Map<String, Object> templateParam = RequestUtils.getParameter(input, "templateParam");
-
             Path templatePath = CommonUtils.getTmpResourcePath("hwpx/image.hwpx");
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -46,24 +37,11 @@ public class ImageHandler implements RequestHandler<APIGatewayProxyRequestEvent,
                     }})
                     .write(baos);
 
-            return new APIGatewayProxyResponseEvent()
-                    .withStatusCode(200)
-                    .withHeaders(Map.of(
-                            "Access-Control-Allow-Origin", "*",
-                            "Content-Type", "application/octet-stream",
-                            "Content-Disposition", "attachment; filename*=UTF-8''" + CommonUtils.encodeFileName(fileName),
-                            "Accept", "*/*"  // 추가
-                    ))
-                    .withIsBase64Encoded(true)
-                    .withBody(Base64.getEncoder().encodeToString(baos.toByteArray()));
+            return ResponseUtils.success(fileName, baos.toByteArray());
 
         } catch (Exception e) {
             e.printStackTrace();
-
-            return new APIGatewayProxyResponseEvent()
-                    .withStatusCode(500)
-                    .withHeaders(Map.of("Access-Control-Allow-Origin", "*"))
-                    .withBody("{\"message\":\"HWPX generation failed\"}");
+            return ResponseUtils.error();
         }
     }
 }

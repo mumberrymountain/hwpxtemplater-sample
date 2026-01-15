@@ -15,7 +15,7 @@ const Explanation: React.FC<ExplanationProps> = ({selectedCard, selectedCardInde
     <div className="w-[95%] shrink-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 py-2">
         {selectedCard === null ? (
         <div className="min-w-0 flex-1">
-            <h2 className="text-2xl md:text-[36px] font-bold mb-2 bg-gradient-to-br from-indigo-500 to-purple-600 bg-clip-text text-transparent">
+            <h2 className="text-2xl md:text-[36px] font-bold mb-2 leading-normal bg-gradient-to-br from-indigo-500 to-purple-600 bg-clip-text text-transparent">
             HwpxTemplater 예제
             </h2>
             <h4 className="mt-1 text-[#a8a5a8] font-normal text-sm md:text-[17px] leading-[1.5]">

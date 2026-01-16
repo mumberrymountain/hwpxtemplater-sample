@@ -24,7 +24,7 @@ public class ResponseUtils {
                 .withStatusCode(200)
                 .withHeaders(Map.of(
                         "Access-Control-Allow-Origin", ALLOW_ORIGIN,
-                        "Content-Type", "application/hwp+zip",
+                        "Content-Type", "application/vnd.hancom.hwpx",
                         "Content-Disposition", "attachment; filename*=UTF-8''" + CommonUtils.encodeFileName(fileName)
                 ))
                 .withIsBase64Encoded(true)

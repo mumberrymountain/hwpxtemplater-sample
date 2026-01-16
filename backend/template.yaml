@@ -23,7 +23,7 @@ Resources:
     Properties:
       StageName: Prod
       BinaryMediaTypes:
-        - application/hwp+zip
+        - application/vnd.hancom.hwpx
         - application/octet-stream
       Auth:
         ApiKeyRequired: false

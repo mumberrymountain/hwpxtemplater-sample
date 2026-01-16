@@ -16,6 +16,7 @@ Globals:
     CodeUri: functions
     SnapStart:
       ApplyOn: PublishedVersions
+    AutoPublishAlias: live
 
 Resources:
   BasicApi:

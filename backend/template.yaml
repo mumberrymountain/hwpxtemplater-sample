@@ -23,7 +23,8 @@ Resources:
     Properties:
       StageName: Prod
       BinaryMediaTypes:
-        - '*~1*'
+        - application/hwp+zip
+        - application/octet-stream
       Auth:
         ApiKeyRequired: false
       Cors:

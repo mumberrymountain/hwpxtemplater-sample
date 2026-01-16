@@ -26,8 +26,7 @@ public class ResponseUtils {
                 .withHeaders(Map.of(
                         "Access-Control-Allow-Origin", ALLOW_ORIGIN,
                         "Content-Type", "application/octet-stream",
-                        "Content-Disposition", "attachment; filename*=UTF-8''" + CommonUtils.encodeFileName(fileName),
-                        "Accept", ACCEPT  // 추가
+                        "Content-Disposition", "attachment; filename*=UTF-8''" + CommonUtils.encodeFileName(fileName)
                 ))
                 .withIsBase64Encoded(true)
                 .withBody(Base64.getEncoder().encodeToString(file));

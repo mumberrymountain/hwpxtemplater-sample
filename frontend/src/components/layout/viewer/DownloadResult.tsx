@@ -29,7 +29,8 @@ const DownloadResult : React.FC<DownloadResultProps> = ({selectedCardIndex, card
             const response = await fetch(`${import.meta.env.VITE_API_URL}/${cardData[selectedCardIndex].api}`, {
                 method: 'POST',
                 headers: {
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'Accept': 'application/vnd.hancom.hwpx'
                 },
                 body: JSON.stringify(data)
             })

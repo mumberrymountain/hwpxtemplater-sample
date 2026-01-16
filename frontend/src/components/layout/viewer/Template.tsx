@@ -16,7 +16,8 @@ const Template: React.FC<TemplateProps> = ({selectedCardIndex, cardData}) => {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/template`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'application/vnd.hancom.hwpx'
           },
           body: JSON.stringify(data)
         });

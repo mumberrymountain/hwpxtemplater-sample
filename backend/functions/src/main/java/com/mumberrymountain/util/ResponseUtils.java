@@ -8,7 +8,6 @@ import java.util.Map;
 
 public class ResponseUtils {
     private static final String ALLOW_ORIGIN = "https://www.hwpxtemplater.link";
-    private static final String ACCEPT = "*/*";
 
     public static APIGatewayProxyResponseEvent preflight() {
         return new APIGatewayProxyResponseEvent()
@@ -25,7 +24,7 @@ public class ResponseUtils {
                 .withStatusCode(200)
                 .withHeaders(Map.of(
                         "Access-Control-Allow-Origin", ALLOW_ORIGIN,
-                        "Content-Type", "application/octet-stream",
+                        "Content-Type", "application/hwp+zip",
                         "Content-Disposition", "attachment; filename*=UTF-8''" + CommonUtils.encodeFileName(fileName)
                 ))
                 .withIsBase64Encoded(true)

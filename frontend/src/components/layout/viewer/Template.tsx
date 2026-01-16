@@ -17,7 +17,7 @@ const Template: React.FC<TemplateProps> = ({selectedCardIndex, cardData}) => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/vnd.hancom.hwpx'
+            'Accept': 'application/hwp+zip'
           },
           body: JSON.stringify(data)
         });

@@ -30,7 +30,7 @@ const DownloadResult : React.FC<DownloadResultProps> = ({selectedCardIndex, card
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  'Accept': 'application/vnd.hancom.hwpx'
+                  'Accept': 'application/hwp+zip'
                 },
                 body: JSON.stringify(data)
             })

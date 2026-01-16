@@ -35,6 +35,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: com.mumberrymountain.BasicHandler::handleRequest
+      AutoPublishAlias: live
       ProvisionedConcurrencyConfig:
         ProvisionedConcurrentExecutions: 1
       Events:

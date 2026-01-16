@@ -38,6 +38,8 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: com.mumberrymountain.BasicHandler::handleRequest
+      ProvisionedConcurrencyConfig:
+        ProvisionedConcurrentExecutions: 1
       Events:
         BasicApiEvent:
           Type: Api

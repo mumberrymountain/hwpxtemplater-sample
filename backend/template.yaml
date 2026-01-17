@@ -30,12 +30,14 @@ Resources:
         AllowHeaders: "'Content-Type,Authorization'"
         AllowMethods: "'GET,POST,OPTIONS'"
         AllowCredentials: false
-  # API 1: Basic
-  BasicFunction:
+
+  # Unified Lambda Function - handles all API endpoints
+  UnifiedFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: com.mumberrymountain.BasicHandler::handleRequest
+      Handler: com.mumberrymountain.UnifiedHandler::handleRequest
       Events:
+        # Basic API
         BasicApiEvent:
           Type: Api
           Properties:
@@ -48,14 +50,8 @@ Resources:
             RestApiId: !Ref BasicApi
             Path: /basic
             Method: options
-
-  # API 2: Condition
-  ConditionFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: com.mumberrymountain.ConditionHandler::handleRequest
-      Events:
-        ConditionApi:
+        # Condition API
+        ConditionApiEvent:
           Type: Api
           Properties:
             RestApiId: !Ref BasicApi
@@ -67,14 +63,8 @@ Resources:
             RestApiId: !Ref BasicApi
             Path: /condition
             Method: options
-
-  # API 3: Loop
-  LoopFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: com.mumberrymountain.LoopHandler::handleRequest
-      Events:
-        LoopApi:
+        # Loop API
+        LoopApiEvent:
           Type: Api
           Properties:
             RestApiId: !Ref BasicApi
@@ -86,14 +76,8 @@ Resources:
             RestApiId: !Ref BasicApi
             Path: /loop
             Method: options
-
-  # API 4: Image
-  ImageFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: com.mumberrymountain.ImageHandler::handleRequest
-      Events:
-        ImageApi:
+        # Image API
+        ImageApiEvent:
           Type: Api
           Properties:
             RestApiId: !Ref BasicApi
@@ -105,14 +89,8 @@ Resources:
             RestApiId: !Ref BasicApi
             Path: /image
             Method: options
-
-  # API 5: Table
-  TableFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: com.mumberrymountain.TableHandler::handleRequest
-      Events:
-        TableApi:
+        # Table API
+        TableApiEvent:
           Type: Api
           Properties:
             RestApiId: !Ref BasicApi
@@ -124,14 +102,8 @@ Resources:
             RestApiId: !Ref BasicApi
             Path: /table
             Method: options
-
-  # API 1: Basic
-  TemplateFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: com.mumberrymountain.TemplateHandler::handleRequest
-      Events:
-        BasicApiEvent:
+        # Template API
+        TemplateApiEvent:
           Type: Api
           Properties:
             RestApiId: !Ref BasicApi

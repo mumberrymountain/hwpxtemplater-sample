@@ -37,4 +37,11 @@ public class ResponseUtils {
                 .withHeaders(Map.of("Access-Control-Allow-Origin", ALLOW_ORIGIN))
                 .withBody("{\"message\":\"HWPX generation failed\"}");
     }
+
+    public static APIGatewayProxyResponseEvent notFound() {
+        return new APIGatewayProxyResponseEvent()
+                .withStatusCode(404)
+                .withHeaders(Map.of("Access-Control-Allow-Origin", ALLOW_ORIGIN))
+                .withBody("{\"message\":\"Not Found\"}");
+    }
 }

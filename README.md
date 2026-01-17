@@ -1,6 +1,6 @@
 # HwpxTemplater Sample
 
-![Demo Preview](frontend/src/assets/images/basic_sample.webp)
+<img width="861" height="512" alt="Image" src="https://github.com/user-attachments/assets/60c475e3-0a04-4703-b4a4-d5f04de11b40" />
 
 ## 1. 개요
 
@@ -44,6 +44,10 @@
 ## 2. 특징
 
 ### Front-end
+
+<img width="319" height="431" alt="Image" src="https://github.com/user-attachments/assets/741fca01-452f-4367-8072-d5cb5c22df34" />
+
+<img width="319" height="431" alt="Image" src="https://github.com/user-attachments/assets/35a37f63-5307-4893-8128-7317fb03ef92" />
 
 - 샘플 인덱스 페이지는 카드로 구성. 개별 카드 클릭시 개별 샘플 확인 가능.
 - 개별 샘플은 세 가지 레이어로 구성됨 

@@ -36,6 +36,9 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: com.mumberrymountain.UnifiedHandler::handleRequest
+      Policies:
+        - S3ReadPolicy:
+            BucketName: hwpxtemplater-sample-template
       Events:
         # Basic API
         BasicApiEvent:

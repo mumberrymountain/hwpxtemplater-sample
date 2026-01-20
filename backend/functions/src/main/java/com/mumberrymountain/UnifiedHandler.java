@@ -10,6 +10,8 @@ import com.mumberrymountain.util.ResponseUtils;
 import io.github.mumberrymountain.HWPXTemplater;
 import io.github.mumberrymountain.model.Image;
 import io.github.mumberrymountain.model.table.Table;
+import software.amazon.awssdk.core.ResponseBytes;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -46,7 +48,7 @@ public class UnifiedHandler implements RequestHandler<APIGatewayProxyRequestEven
     private APIGatewayProxyResponseEvent handleBasic(APIGatewayProxyRequestEvent input) throws Exception {
         String fileName = RequestUtils.getParameter(input, "fileName");
         Map<String, Object> templateParam = RequestUtils.getParameter(input, "templateParam");
-        Path templatePath = CommonUtils.getTmpResourcePath("hwpx/basic.hwpx");
+        Path templatePath = CommonUtils.getTmpResourcePath("basic.hwpx");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         HWPXTemplater.builder()
@@ -60,7 +62,7 @@ public class UnifiedHandler implements RequestHandler<APIGatewayProxyRequestEven
     private APIGatewayProxyResponseEvent handleCondition(APIGatewayProxyRequestEvent input) throws Exception {
         String fileName = RequestUtils.getParameter(input, "fileName");
         Map<String, Object> templateParam = RequestUtils.getParameter(input, "templateParam");
-        Path templatePath = CommonUtils.getTmpResourcePath("hwpx/condition.hwpx");
+        Path templatePath = CommonUtils.getTmpResourcePath("condition.hwpx");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         HWPXTemplater.builder()
@@ -74,7 +76,7 @@ public class UnifiedHandler implements RequestHandler<APIGatewayProxyRequestEven
     private APIGatewayProxyResponseEvent handleLoop(APIGatewayProxyRequestEvent input) throws Exception {
         String fileName = RequestUtils.getParameter(input, "fileName");
         Map<String, Object> templateParam = RequestUtils.getParameter(input, "templateParam");
-        Path templatePath = CommonUtils.getTmpResourcePath("hwpx/loop.hwpx");
+        Path templatePath = CommonUtils.getTmpResourcePath("loop.hwpx");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         HWPXTemplater.builder()
@@ -88,7 +90,7 @@ public class UnifiedHandler implements RequestHandler<APIGatewayProxyRequestEven
     private APIGatewayProxyResponseEvent handleImage(APIGatewayProxyRequestEvent input) throws Exception {
         String fileName = RequestUtils.getParameter(input, "fileName");
         Map<String, Object> templateParam = RequestUtils.getParameter(input, "templateParam");
-        Path templatePath = CommonUtils.getTmpResourcePath("hwpx/image.hwpx");
+        Path templatePath = CommonUtils.getTmpResourcePath("image.hwpx");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         HWPXTemplater.builder()
@@ -107,7 +109,7 @@ public class UnifiedHandler implements RequestHandler<APIGatewayProxyRequestEven
     private APIGatewayProxyResponseEvent handleTable(APIGatewayProxyRequestEvent input) throws Exception {
         String fileName = RequestUtils.getParameter(input, "fileName");
         Map<String, Object> templateParam = RequestUtils.getParameter(input, "templateParam");
-        Path templatePath = CommonUtils.getTmpResourcePath("hwpx/table.hwpx");
+        Path templatePath = CommonUtils.getTmpResourcePath("table.hwpx");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         Table workshopGrantBudget = CommonUtils.createTableFromParam(
@@ -131,12 +133,7 @@ public class UnifiedHandler implements RequestHandler<APIGatewayProxyRequestEven
 
     private APIGatewayProxyResponseEvent handleTemplate(APIGatewayProxyRequestEvent input) throws Exception {
         String fileName = RequestUtils.getParameter(input, "fileName");
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("hwpx/" + fileName);
-        if (inputStream == null) {
-            throw new Exception("File not found");
-        }
-
-        return ResponseUtils.success("output.hwpx", inputStream.readAllBytes());
+        return ResponseUtils.success("output.hwpx", CommonUtils.getTemplateBytes(fileName).asByteArray());
     }
 }
 

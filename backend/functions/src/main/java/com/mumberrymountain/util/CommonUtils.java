@@ -1,18 +1,23 @@
 package com.mumberrymountain.util;
 
+import software.amazon.awssdk.core.ResponseBytes;
+import software.amazon.awssdk.core.sync.ResponseTransformer;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import io.github.mumberrymountain.model.table.Align;
 import io.github.mumberrymountain.model.table.Col;
 import io.github.mumberrymountain.model.table.Table;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +25,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public final class CommonUtils {
+
+    private static final String S3_BUCKET_NAME = "hwpxtemplater-sample-template";
+    private static final S3Client s3Client = S3Client.builder()
+            .region(Region.AP_NORTHEAST_1)
+            .build();
 
     private CommonUtils() {}
 
@@ -29,21 +39,33 @@ public final class CommonUtils {
                 .replaceAll("\\+", "%20");
     }
 
-    public static Path getTmpResourcePath(String classpathLocation) throws IOException {
-        InputStream inputStream = Thread.currentThread()
-                .getContextClassLoader()
-                .getResourceAsStream(classpathLocation);
+    public static ResponseBytes<GetObjectResponse> getTemplateBytes(String fileName) throws NoSuchKeyException {
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(S3_BUCKET_NAME)
+                .key(fileName)
+                .build();
 
-        if (inputStream == null) {
-            throw new FileNotFoundException(classpathLocation + " not found in resources");
-        }
+        return s3Client.getObject(
+                getObjectRequest,
+                ResponseTransformer.toBytes()
+        );
+    }
 
-        String fileName = Paths.get(classpathLocation).getFileName().toString();
+    public static Path getTmpResourcePath(String fileName) throws IOException, NoSuchKeyException {
         Path target = Paths.get("/tmp", fileName);
 
-        try (inputStream) {
-            Files.copy(inputStream, target, StandardCopyOption.REPLACE_EXISTING);
-        }
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(S3_BUCKET_NAME)
+                .key(fileName)
+                .build();
+
+        ResponseBytes<GetObjectResponse> objectBytes = s3Client.getObject(
+                getObjectRequest,
+                ResponseTransformer.toBytes()
+        );
+
+        Files.write(target, objectBytes.asByteArray(),
+                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
         return target;
     }

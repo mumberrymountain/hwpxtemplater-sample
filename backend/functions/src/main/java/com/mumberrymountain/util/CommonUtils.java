@@ -52,7 +52,12 @@ public final class CommonUtils {
     }
 
     public static Path getTmpResourcePath(String fileName) throws IOException, NoSuchKeyException {
-        Path target = Paths.get("/tmp", fileName);
+        Path base = Paths.get("/tmp");
+        Path target = base.resolve(fileName).normalize();
+
+        if (!target.startsWith(base)) throw new IllegalArgumentException("Invalid fileName");
+        if (target.getParent() != null) Files.createDirectories(target.getParent());
+
 
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(S3_BUCKET_NAME)

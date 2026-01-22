@@ -88,7 +88,7 @@
 - 처음에는 `template.yaml`의 BinaryMediaType을 "~*"로 설정하여 모든 MIME 타입을 바이너리로 처리하도록 해결
 - 다만 이런 모호한 처리는 앞으로 모든 MIME 타입을 바이너리로 처리하도록 설정한다는 의미라 차후의 유지보수성을 따져보건대 좋은 코드라 보기 힘듦
 
-**대응**
+**해결**
 
 ```yaml
 BinaryMediaType:
@@ -117,10 +117,54 @@ const response = await fetch(`${import.meta.env.VITE_API_URL}/${cardData[selecte
 - AWS Lambda는 요청이 없으면 컨테이너를 내리기 때문에, 처음 호출되거나 오랜만에 호출될 경우 컨테이너를 새로 올리는 Cold Start가 발생함
 - 이로 인해 초기 응답 속도가 느려 다운로드 성능이 저하되는 문제가 있음
 
-**대응**
+**해결**
 
 - 기존에는 API마다 별도의 Lambda 함수를 사용했으나, 하나의 함수로 통합함. Cold Start 자체를 해결하진 않지만, 여러 API가 하나의 컨테이너를 공유하므로 컨테이너가 내려가는 빈도를 줄일 수 있음. (예를 들어 basic api 호출이 오래 이뤄지고 있지 않아도 condition api가 호출되면 컨테이너가 내려가지 않음.)
 - 근본적 해결책은 프로비저닝된 동시성 적용이나, 월 $20 이상의 추가 비용이 발생함. API 호출 빈도가 낮아 비용 대비 효과가 적다고 판단하여 적용하지 않음
+
+## 템플릿 파일을 repository 내부에서 관리할 때 협업 효율성 저하 및 배포 비효율 문제
+
+**문제**
+
+- 처음에는 템플릿 파일을 repository 내부에 포함시키고 사용하도록 처리했으나
+  1) 실무에서 이러한 템플릿 파일의 편집자는 보통 개발자가 아님. repository 내부에 파일을 넣으면 매번 개발자가 파일을 받아 교체해야 할텐데 업무 구조상 상당히 비효율적임.
+  2) 템플릿 파일을 교체할 때마다 서버가 재배포됨
+ 
+**해결**
+
+<img width="252" height="347" alt="AWS S3" src="https://github.com/user-attachments/assets/08546817-e1ec-464b-b27b-61788289b8e9" />
+
+<br/>
+
+```java
+public static Path getTmpResourcePath(String fileName) throws IOException, NoSuchKeyException {
+    Path base = Paths.get("/tmp");
+    Path target = base.resolve(fileName).normalize();
+
+    if (!target.startsWith(base)) throw new IllegalArgumentException("Invalid fileName");
+    if (target.getParent() != null) Files.createDirectories(target.getParent());
+
+
+    GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+            .bucket(S3_BUCKET_NAME)
+            .key(fileName)
+            .build();
+
+    ResponseBytes<GetObjectResponse> objectBytes = s3Client.getObject(
+            getObjectRequest,
+            ResponseTransformer.toBytes()
+    );
+
+    Files.write(target, objectBytes.asByteArray(),
+            StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
+    return target;
+}
+```
+
+- Repository에서 템플릿 파일 제거, AWS S3 버킷으로 이관
+- 런타임에 S3에서 템플릿 파일을 동적으로 다운로드하여 사용
+- 비개발자 IAM 그룹에 S3 버킷 쓰기 권한 부여하여 코드 배포 없이 템플릿 교체 가능
 
 ---
 
